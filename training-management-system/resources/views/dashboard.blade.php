@@ -71,4 +71,13 @@
         </div>
     </div>
 </body>
+
+<script>
+    $(document).ready(function() {
+        $('#totalUsers').text({{ $totalUsers }});
+        $('#totalCompanies').text({{ $totalCompanies }});
+        $('#totalBanners').text({{ $totalBanners }});
+    });
+</script>
+
 </html>
