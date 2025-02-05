@@ -22,3 +22,21 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard', ['role' => Auth::user()->role]);
+    })->name('dashboard');
+
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/admin', function () {
+            return "Halaman Admin";
+        });
+    });
+
+    Route::middleware('role:guest')->group(function () {
+        Route::get('/guest', function () {
+            return "Halaman Guest";
+        });
+    });
+});
