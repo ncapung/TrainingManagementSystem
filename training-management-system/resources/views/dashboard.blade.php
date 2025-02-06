@@ -24,7 +24,7 @@
                     <a href="{{ route('dashboard') }}" class="nav-link text-white">Dashboard</a>
                 </li>
                 @if(Auth::user()->role == 'admin')
-                    <li class="nav-item"><a href="#" class="nav-link text-white">Users</a></li>
+                    <li class="nav-item"><a href="{{ route('users.index') }}" class="nav-link text-white">Users</a></li>
                     <li class="nav-item"><a href="#" class="nav-link text-white">Companies</a></li>
                     <li class="nav-item"><a href="#" class="nav-link text-white">Banners</a></li>
                     <li class="nav-item"><a href="#" class="nav-link text-white">Roles</a></li>
@@ -40,7 +40,7 @@
          </nav>
          
         <!-- Main Content -->
-        <div class="container-fluid" style="margin-left: 280px; margin-right: 40px; padding-top: 20px;">
+        <div class="container-fluid" style="margin-left: 280px; margin-right: 40px; padding-top: 20px; padding-left: 20px;">
             <h2 style="margin-top: 30px; margin-bottom: 30px;">Dashboard</h2>
             <div class="row">
                 <div class="col-md-4">
