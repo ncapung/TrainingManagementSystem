@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Banner extends Model
+class Role extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'banner_img',
-        'banner_name',
-        'banner_desc',
+        'admin_role',
+        'guest_role',
     ];
 }

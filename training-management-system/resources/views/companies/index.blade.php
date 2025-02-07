@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <title>Users</title>
+    <title>Companies Management</title>
 
     <style>
         body {
@@ -77,42 +77,34 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <h2 style="margin-top: 30px; margin-bottom: 20px;">Users Management</h2>
+            <h2 style="margin-top: 30px; margin-bottom: 20px;">Companies Management</h2>
 
             <!-- Success Message -->
             @if(session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <table style="margin-bottom: 50px;" id="usersTable" class="table table-striped">
+            <table style="margin-bottom: 50px;" id="companiesTable" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Username</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Company</th>
-                        <th>Role</th>
-                        <th>Birthday</th>
+                        <th>Company Name</th>
+                        <th>Company Code</th>
+                        <th>Address</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @foreach ($companies as $company)
                     <tr>
-                        <td>{{ $user->username }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->phone_number }}</td>
-                        <td>{{ $user->company }}</td>
-                        <td>{{ $user->role }}</td>
-                        <td>{{ $user->birthday }}</td>
+                        <td>{{ $company->company_name }}</td>
+                        <td>{{ $company->company_code }}</td>
+                        <td>{{ $company->alamat }}</td>
                         <td>
-                            <button class="btn btn-edit btn-sm text-white editUser" data-id="{{ $user->id }}">Edit</button>
-                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="delete-form" style="display:inline;">
+                            <button class="btn btn-edit btn-sm text-white editCompany" data-id="{{ $company->id }}">Edit</button>
+                            <form action="{{ route('companies.destroy', $company->id) }}" method="POST" class="delete-form" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $user->id }}" data-name="{{ $user->name }}">Delete</button>
+                                <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $company->id }}" data-name="{{ $company->name }}">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -120,44 +112,23 @@
                 </tbody>
             </table>
 
-            <!-- Add User Form -->
-            <h3 class="mt-4" style="margin-bottom: 20px;">Add New User</h3>
-            <form id="addUserForm" action="{{ route('users.store') }}" method="POST">
-            @csrf
-            <div class="mb-2">
-                <label>Username</label>
-                <input type="text" name="username" class="form-control" required>
-            </div>
-            <div class="mb-2">
-                <label>Name</label>
-                <input type="text" name="name" class="form-control" required>
-            </div>
-            <div class="mb-2">
-                <label>Email</label>
-                <input type="email" name="email" class="form-control" required>
-            </div>
-            <div class="mb-2">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" required>
-            </div>
-            <div class="mb-2">
-                <label>Phone Number</label>
-                <input type="text" name="phone_number" class="form-control" required>
-            </div>
-            <div class="mb-2">
-                <label>Company Name</label>
-                <input type="text" name="company_name" class="form-control">
-            </div>
-            <div class="mb-2">
-                <label>Role</label><br>
-                <input type="radio" name="role" value="admin" required> Admin
-                <input type="radio" name="role" value="guest" required> Guest
-            </div>
-            <div class="mb-2">
-                <label>Birthday</label>
-                <input type="date" name="birthday" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary mt-2">Add User</button>
+            <!-- Add Company Form -->
+            <h3 class="mt-4" style="margin-bottom: 20px;">Add New Company</h3>
+            <form id="addCompanyForm" action="{{ route('companies.store') }}" method="POST">
+                @csrf
+                <div class="mb-2">
+                    <label>Company name</label>
+                    <input type="text" name="company_name" class="form-control" required>
+                </div>
+                <div class="mb-2">
+                    <label>Company code</label>
+                    <input type="text" name="company_code" class="form-control" required>
+                </div>
+                <div class="mb-2">
+                    <label>Address</label>
+                    <input type="text" name="alamat" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Add Company</button>
             </form>
         </div>
     </div>
@@ -166,30 +137,44 @@
 <script src="//cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#usersTable').DataTable();
+        $('#companiesTable').DataTable();
 
-        $('.delete-btn').click(function() {
-            let userId = $(this).data('id');
-            let userName = $(this).data('name');
+        $('#addCompanyForm').submit(function(e) {
+            e.preventDefault(); // Mencegah reload halaman
 
-            if (confirm(`Are you sure to delete user?"${userName}"?`)) {
-                $(this).closest('.delete-form').submit();
-            }
-        });
-
-        $('#addUserForm').submit(function(e) {
-            e.preventDefault();
+            let formData = $(this).serialize(); // Ambil data dari form
 
             $.ajax({
-                url: "{{ route('users.store') }}",
+                url: "{{ route('companies.store') }}",
                 type: "POST",
-                data: $(this).serialize(),
+                data: formData,
                 success: function(response) {
-                    alert('User successfully added!');
-                    location.reload();
+                    if (response.success) {
+                        // Tambahkan data company ke dalam tabel tanpa reload halaman
+                        let newRow = `<tr>
+                            <td>${response.company.company_name}</td>
+                            <td>${response.company.company_code}</td>
+                            <td>${response.company.alamat}</td>
+                            <td>
+                                <button class="btn btn-edit btn-sm text-white editCompany" data-id="${response.company.id}">Edit</button>
+                                <form action="{{ route('companies.destroy', '') }}/${response.company.id}" method="POST" class="delete-form" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="${response.company.id}" data-name="${response.company.company_name}">Delete</button>
+                                </form>
+                            </td>
+                        </tr>`;
+                        $('#companiesTable tbody').append(newRow);
+
+                        // Reset Form Input
+                        $('#addCompanyForm')[0].reset();
+
+                        // Tampilkan pesan sukses
+                        alert("Company added successfully!");
+                    }
                 },
                 error: function(response) {
-                    alert('Fail to add user!');
+                    alert("Failed to add company. Please check the inputs.");
                 }
             });
         });

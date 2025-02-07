@@ -39,7 +39,7 @@ class UserController extends Controller
             'birthday' => $request->birthday,
         ]);
 
-        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
+        return redirect()->route('users.index')->with('success', 'User added successfully.');
     }
 
     public function edit($id)
@@ -72,13 +72,13 @@ class UserController extends Controller
             'birthday' => $request->birthday,
         ]);
 
-        return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
+        return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
+        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 }

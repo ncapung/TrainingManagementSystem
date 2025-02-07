@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <title>Users</title>
+    <title>Banners</title>
 
     <style>
         body {
@@ -87,26 +87,17 @@
             <table style="margin-bottom: 50px;" id="usersTable" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Username</th>
+                        <th>Banners</th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Company</th>
-                        <th>Role</th>
-                        <th>Birthday</th>
-                        <th>Actions</th>
+                        <th>Description</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($users as $user)
                     <tr>
-                        <td>{{ $user->username }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->phone_number }}</td>
-                        <td>{{ $user->company }}</td>
-                        <td>{{ $user->role }}</td>
-                        <td>{{ $user->birthday }}</td>
+                        <td>{{ $banner->username }}</td>
+                        <td>{{ $banner->name }}</td>
+                        <td>{{ $banner->email }}</td>
                         <td>
                             <button class="btn btn-edit btn-sm text-white editUser" data-id="{{ $user->id }}">Edit</button>
                             <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="delete-form" style="display:inline;">
@@ -166,33 +157,7 @@
 <script src="//cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#usersTable').DataTable();
-
-        $('.delete-btn').click(function() {
-            let userId = $(this).data('id');
-            let userName = $(this).data('name');
-
-            if (confirm(`Are you sure to delete user?"${userName}"?`)) {
-                $(this).closest('.delete-form').submit();
-            }
-        });
-
-        $('#addUserForm').submit(function(e) {
-            e.preventDefault();
-
-            $.ajax({
-                url: "{{ route('users.store') }}",
-                type: "POST",
-                data: $(this).serialize(),
-                success: function(response) {
-                    alert('User successfully added!');
-                    location.reload();
-                },
-                error: function(response) {
-                    alert('Fail to add user!');
-                }
-            });
-        });
+        $('#companiesTable').DataTable();
     });
 </script>
 </html>

@@ -17,7 +17,7 @@
 <body>
     <div class="d-flex">
         <!-- Sidebar -->
-         <nav class="text-white p-3" style="background-color:rgb(25, 32, 59); width: 250px; height: 100vh; position: fixed;">
+        <nav class="text-white p-3" style="background-color:rgb(25, 32, 59); width: 250px; height: 100vh; position: fixed;">
             <h5 class="text-center" style="margin-top: 20px; margin-bottom: 40px">Training Management System</h5>
             <ul class="nav flex-column">
                 <li class="nav-item">
@@ -25,9 +25,9 @@
                 </li>
                 @if(Auth::user()->role == 'admin')
                     <li class="nav-item"><a href="{{ route('users.index') }}" class="nav-link text-white">Users</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white">Companies</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white">Banners</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white">Roles</a></li>
+                    <li class="nav-item"><a href="{{ route('companies.index') }}" class="nav-link text-white">Companies</a></li>
+                    <li class="nav-item"><a href="{{ route('banners.index') }}" class="nav-link text-white">Banners</a></li>
+                    <li class="nav-item"><a href="{{ route('roles.index') }}" class="nav-link text-white">Roles</a></li>
                 @endif
                 <li class="nav-item"><a href="#" class="nav-link text-white">Manual Books</a></li>
                 <li class="nav-item">
