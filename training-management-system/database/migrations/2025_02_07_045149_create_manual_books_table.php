@@ -6,19 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
-        Schema::create('banners', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('image');
+        Schema::create('manual_books', function (Blueprint $table) {
+            $table->string('title');
             $table->text('description');
+            $table->string('file_path');
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down()
     {
-        Schema::dropIfExists('banners');
+        Schema::dropIfExists('manual_books');
     }
 };

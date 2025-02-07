@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <title>Banners Management</title>
+    <title>Manual Books</title>
 
     <style>
         body {
@@ -77,7 +77,7 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <h2 style="margin-top: 30px; margin-bottom: 20px;">Banners Management</h2>
+            <h2 style="margin-top: 30px; margin-bottom: 20px;">Manual Books</h2>
 
             <!-- Success Message -->
             @if(session('success'))
@@ -87,47 +87,46 @@
             <table style="margin-bottom: 50px;" id="bannersTable" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Image</th>
-                        <th>Name</th>
+                        <th>Title</th>
                         <th>Description</th>
+                        <th>File</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($banners as $banner)
+                @foreach ($manualBooks as $book)
                     <tr>
-                        <td><img src="{{ asset('storage/' . $banner->image) }}" width="100"></td>
-                        <td>{{ $banner->name }}</td>
-                        <td>{{ $banner->description }}</td>
+                        <td>{{ $book->title }}</td>
+                        <td>{{ $book->description }}</td>
+                        <td><a href="{{ Storage::url($book->file_path) }}" target="_blank">View</a></td>
                         <td>
-                            <form action="{{ route('banners.destroy', $banner->id) }}" method="POST" class="delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm delete-btn">Delete</button>
+                            <form action="{{ route('manual_books.destroy', $book->id) }}" method="POST">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                         </td>
                     </tr>
-                    @endforeach
+                @endforeach
                 </tbody>
             </table>
 
             <!-- Add Company Form -->
             <h3 class="mt-4" style="margin-bottom: 20px;">Add New Company</h3>
-            <form id="addBannerForm" action="{{ route('banners.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('manual_books.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="mb-2">
-                    <label>Banners</label>
-                    <input type="file" name="image" class="form-control" required>
+                <div class="mb-3">
+                    <label>Title</label>
+                    <input type="text" name="title" class="form-control" required>
                 </div>
-                <div class="mb-2">
-                    <label>Name</label>
-                    <input type="text" name="name" class="form-control" required>
-                </div>
-                <div class="mb-2">
+                <div class="mb-3">
                     <label>Description</label>
                     <textarea name="description" class="form-control" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary mt-2">Add Banner</button>
+                <div class="mb-3">
+                    <label>Upload File (PDF)</label>
+                    <input type="file" name="file" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Manual Book</button>
             </form>
         </div>
     </div>
