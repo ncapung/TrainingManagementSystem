@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <title>Banners</title>
+    <title>Banners Management</title>
 
     <style>
         body {
@@ -77,33 +77,33 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <h2 style="margin-top: 30px; margin-bottom: 20px;">Users Management</h2>
+            <h2 style="margin-top: 30px; margin-bottom: 20px;">Banners Management</h2>
 
             <!-- Success Message -->
             @if(session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <table style="margin-bottom: 50px;" id="usersTable" class="table table-striped">
+            <table style="margin-bottom: 50px;" id="bannersTable" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Banners</th>
+                        <th>Image</th>
                         <th>Name</th>
                         <th>Description</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @foreach ($banners as $banner)
                     <tr>
-                        <td>{{ $banner->username }}</td>
+                        <td><img src="{{ asset('storage/' . $banner->image) }}" width="100"></td>
                         <td>{{ $banner->name }}</td>
-                        <td>{{ $banner->email }}</td>
+                        <td>{{ $banner->description }}</td>
                         <td>
-                            <button class="btn btn-edit btn-sm text-white editUser" data-id="{{ $user->id }}">Edit</button>
-                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="delete-form" style="display:inline;">
+                            <form action="{{ route('banners.destroy', $banner->id) }}" method="POST" class="delete-form">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $user->id }}" data-name="{{ $user->name }}">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm delete-btn">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -111,44 +111,23 @@
                 </tbody>
             </table>
 
-            <!-- Add User Form -->
-            <h3 class="mt-4" style="margin-bottom: 20px;">Add New User</h3>
-            <form id="addUserForm" action="{{ route('users.store') }}" method="POST">
-            @csrf
-            <div class="mb-2">
-                <label>Username</label>
-                <input type="text" name="username" class="form-control" required>
-            </div>
-            <div class="mb-2">
-                <label>Name</label>
-                <input type="text" name="name" class="form-control" required>
-            </div>
-            <div class="mb-2">
-                <label>Email</label>
-                <input type="email" name="email" class="form-control" required>
-            </div>
-            <div class="mb-2">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" required>
-            </div>
-            <div class="mb-2">
-                <label>Phone Number</label>
-                <input type="text" name="phone_number" class="form-control" required>
-            </div>
-            <div class="mb-2">
-                <label>Company Name</label>
-                <input type="text" name="company_name" class="form-control">
-            </div>
-            <div class="mb-2">
-                <label>Role</label><br>
-                <input type="radio" name="role" value="admin" required> Admin
-                <input type="radio" name="role" value="guest" required> Guest
-            </div>
-            <div class="mb-2">
-                <label>Birthday</label>
-                <input type="date" name="birthday" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary mt-2">Add User</button>
+            <!-- Add Company Form -->
+            <h3 class="mt-4" style="margin-bottom: 20px;">Add New Company</h3>
+            <form id="addBannerForm" action="{{ route('banners.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="mb-2">
+                    <label>Banners</label>
+                    <input type="file" name="image" class="form-control" required>
+                </div>
+                <div class="mb-2">
+                    <label>Name</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+                <div class="mb-2">
+                    <label>Description</label>
+                    <textarea name="description" class="form-control" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Add Banner</button>
             </form>
         </div>
     </div>
@@ -156,8 +135,15 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="//cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#companiesTable').DataTable();
-    });
-</script>
+        $(document).ready(function() {
+            $('#bannersTable').DataTable();
+
+            $('.delete-btn').click(function(e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to delete this banner?')) {
+                    $(this).closest('form').submit();
+                }
+            });
+        });
+    </script>
 </html>

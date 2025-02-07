@@ -17,40 +17,35 @@ class CompanyController extends Controller
     {
         $request->validate([
             'company_name' => 'required',
-            'company_code' => 'required|unique:companies,company_code',
+            'company_code' => 'required|unique:companies',
             'alamat' => 'required',
         ]);
 
-        $company = Company::create($request->all());
+        Company::create($request->all());
 
-        return response()->json([
-            'success' => true,
-            'company' => $company
-        ]);
+        return redirect()->route('companies.index')->with('success', 'Company added successfully.');
     }
 
-    public function edit($id)
+    public function edit(Company $company)
     {
-        $company = Company::findOrFail($id);
         return response()->json($company);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Company $company)
     {
         $request->validate([
             'company_name' => 'required',
-            'company_code' => 'required|unique:companies,company_code,' . $id,
-            'address' => 'required',
+            'company_code' => 'required|unique:companies,company_code,' . $company->id,
+            'alamat' => 'required',
         ]);
 
-        $company = Company::findOrFail($id);
         $company->update($request->all());
+
         return redirect()->route('companies.index')->with('success', 'Company updated successfully.');
     }
 
-    public function destroy($id)
+    public function destroy(Company $company)
     {
-        $company = Company::findOrFail($id);
         $company->delete();
         return redirect()->route('companies.index')->with('success', 'Company deleted successfully.');
     }

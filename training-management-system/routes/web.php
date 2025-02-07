@@ -5,6 +5,8 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\BannerController;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------

@@ -139,44 +139,11 @@
     $(document).ready(function() {
         $('#companiesTable').DataTable();
 
-        $('#addCompanyForm').submit(function(e) {
-            e.preventDefault(); // Mencegah reload halaman
-
-            let formData = $(this).serialize(); // Ambil data dari form
-
-            $.ajax({
-                url: "{{ route('companies.store') }}",
-                type: "POST",
-                data: formData,
-                success: function(response) {
-                    if (response.success) {
-                        // Tambahkan data company ke dalam tabel tanpa reload halaman
-                        let newRow = `<tr>
-                            <td>${response.company.company_name}</td>
-                            <td>${response.company.company_code}</td>
-                            <td>${response.company.alamat}</td>
-                            <td>
-                                <button class="btn btn-edit btn-sm text-white editCompany" data-id="${response.company.id}">Edit</button>
-                                <form action="{{ route('companies.destroy', '') }}/${response.company.id}" method="POST" class="delete-form" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="${response.company.id}" data-name="${response.company.company_name}">Delete</button>
-                                </form>
-                            </td>
-                        </tr>`;
-                        $('#companiesTable tbody').append(newRow);
-
-                        // Reset Form Input
-                        $('#addCompanyForm')[0].reset();
-
-                        // Tampilkan pesan sukses
-                        alert("Company added successfully!");
-                    }
-                },
-                error: function(response) {
-                    alert("Failed to add company. Please check the inputs.");
-                }
-            });
+        $('.delete-btn').click(function() {
+            let companyName = $(this).data('name');
+            if (confirm(`Are you sure you want to delete this company?"${companyName}"?`)) {
+                $(this).closest('.delete-form').submit();
+            }
         });
     });
 </script>
