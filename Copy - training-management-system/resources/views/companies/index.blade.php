@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <title>Manual Books</title>
+    <title>Companies Management</title>
 
     <style>
         body {
@@ -77,56 +77,58 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <h2 style="margin-top: 30px; margin-bottom: 20px;">Manual Books</h2>
+            <h2 style="margin-top: 30px; margin-bottom: 20px;">Companies Management</h2>
 
             <!-- Success Message -->
             @if(session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <table style="margin-bottom: 50px;" id="manual_booksTable" class="table table-striped">
+            <table style="margin-bottom: 50px;" id="companiesTable" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>File</th>
+                        <th>Company Name</th>
+                        <th>Company Code</th>
+                        <th>Address</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach ($manual_books as $book)
+                    @foreach ($companies as $company)
                     <tr>
-                        <td>{{ $book->title }}</td>
-                        <td>{{ $book->description }}</td>
-                        <td><a href="{{ Storage::url($book->file_path) }}" target="_blank">View</a></td>
+                        <td>{{ $company->company_name }}</td>
+                        <td>{{ $company->company_code }}</td>
+                        <td>{{ $company->alamat }}</td>
                         <td>
-                            <form action="{{ route('manual_books.destroy', $book->id) }}" method="POST">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                            <button class="btn btn-edit btn-sm text-white editCompany" data-id="{{ $company->id }}">Edit</button>
+                            <form action="{{ route('companies.destroy', $company->id) }}" method="POST" class="delete-form" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $company->id }}" data-name="{{ $company->name }}">Delete</button>
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                    @endforeach
                 </tbody>
             </table>
 
             <!-- Add Company Form -->
-            <h3 class="mt-4" style="margin-bottom: 20px;">Add New Manual Book</h3>
-            <form id="addManualBookForm" action="{{ route('manual_books.store') }}" method="POST" enctype="multipart/form-data">
+            <h3 class="mt-4" style="margin-bottom: 20px;">Add New Company</h3>
+            <form id="addCompanyForm" action="{{ route('companies.store') }}" method="POST">
                 @csrf
-                <div class="mb-3">
-                    <label>Title</label>
-                    <input type="text" name="title" class="form-control" required>
+                <div class="mb-2">
+                    <label>Company name</label>
+                    <input type="text" name="company_name" class="form-control" required>
                 </div>
-                <div class="mb-3">
-                    <label>Description</label>
-                    <input type="text" name="description" class="form-control" required></
+                <div class="mb-2">
+                    <label>Company code</label>
+                    <input type="text" name="company_code" class="form-control" required>
                 </div>
-                <div class="mb-3">
-                    <label>Upload File (PDF)</label>
-                    <input type="file" name="file" class="form-control" required>
+                <div class="mb-2">
+                    <label>Address</label>
+                    <input type="text" name="alamat" class="form-control" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Add Manual Book</button>
+                <button type="submit" class="btn btn-primary mt-2">Add Company</button>
             </form>
         </div>
     </div>
@@ -134,40 +136,15 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="//cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
 <script>
-$(document).ready(function() {
-    $('#manual_booksTable').DataTable();
+    $(document).ready(function() {
+        $('#companiesTable').DataTable();
 
-    $('#addManualBookForm').submit(function(e) {
-        e.preventDefault();
-        let formData = new FormData(this);
-
-        $.ajax({
-            url: "{{ route('manual_books.store') }}",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                let newRow = `<tr>
-                    <td>${response.title}</td>
-                    <td>${response.description}</td>
-                    <td><a href="/storage/${response.file_path}" target="_blank">View</a></td>
-                    <td>
-                        <form action="/manual_books/${response.id}" method="POST">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>`;
-                $('table tbody').append(newRow);
-                $('#addManualBookForm')[0].reset();
-                alert('Manual Book added successfully!');
-            },
-            error: function(response) {
-                alert('Failed to add manual book. Please try again.');
+        $('.delete-btn').click(function() {
+            let companyName = $(this).data('name');
+            if (confirm(`Are you sure you want to delete this company?"${companyName}"?`)) {
+                $(this).closest('.delete-form').submit();
             }
         });
     });
-});
 </script>
 </html>

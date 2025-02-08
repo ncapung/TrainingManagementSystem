@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <title>Banners Management</title>
+    <title>Roles</title>
 
     <style>
         body {
@@ -77,58 +77,43 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <h2 style="margin-top: 30px; margin-bottom: 20px;">Banners Management</h2>
+            <h2 style="margin-top: 30px; margin-bottom: 20px;">Roles</h2>
 
             <!-- Success Message -->
             @if(session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <table style="margin-bottom: 50px;" id="bannersTable" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($banners as $banner)
-                    <tr>
-                        <td><img src="{{ asset('storage/' . $banner->image) }}" width="100"></td>
-                        <td>{{ $banner->name }}</td>
-                        <td>{{ $banner->description }}</td>
-                        <td>
-                            <form action="{{ route('banners.destroy', $banner->id) }}" method="POST" class="delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm delete-btn">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
+            <table style="margin-bottom: 50px;" id="rolesTable" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Users</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Admin</strong></td>
+                    <td>
+                        <ul>
+                            @foreach($admins as $admin)
+                                <li>{{ $admin->name }}</li>
+                            @endforeach
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Guest</strong></td>
+                    <td>
+                        <ul>
+                            @foreach($guests as $guest)
+                                <li>{{ $guest->name }}</li>
+                            @endforeach
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
             </table>
-
-            <!-- Add Company Form -->
-            <h3 class="mt-4" style="margin-bottom: 20px;">Add New Banner</h3>
-            <form id="addBannerForm" action="{{ route('banners.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="mb-2">
-                    <label>Banners</label>
-                    <input type="file" name="image" class="form-control" required>
-                </div>
-                <div class="mb-2">
-                    <label>Name</label>
-                    <input type="text" name="name" class="form-control" required>
-                </div>
-                <div class="mb-2">
-                    <label>Description</label>
-                    <textarea name="description" class="form-control" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary mt-2">Add Banner</button>
-            </form>
         </div>
     </div>
 </body>

@@ -29,7 +29,7 @@
                     <li class="nav-item"><a href="{{ route('banners.index') }}" class="nav-link text-white">Banners</a></li>
                     <li class="nav-item"><a href="{{ route('roles.index') }}" class="nav-link text-white">Roles</a></li>
                 @endif
-                <li class="nav-item"><a href="#" class="nav-link text-white">Manual Books</a></li>
+                <li class="nav-item"><a href="{{ route('manual_books.index') }}" class="nav-link text-white">Manual Books</a></li>
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf

@@ -30,22 +30,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
-    // Route::get('/dashboard', function () {
-    //     return view('dashboard', ['role' => Auth::user()->role]);
-    // })->name('dashboard');
-
-    // Route::middleware('role:admin')->group(function () {
-    //     Route::get('/admin', function () {
-    //         return "Halaman Admin";
-    //     });
-    // });
-
-    // Route::middleware('role:guest')->group(function () {
-    //     Route::get('/guest', function () {
-    //         return "Halaman Guest";
-    //     });
-    // });
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -77,10 +61,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
     Route::get('/roles/{role}', [RoleController::class, 'show'])->name('roles.show');
 
-    Route::get('/manual_books', [RoleController::class, 'index'])->name('manual_books.index');
-    Route::post('/manual_books', [RoleController::class, 'store'])->name('manual_books.store');
-    Route::get('/manual_books/{manualBook}/edit', [RoleController::class, 'edit'])->name('manual_books.edit');
-    Route::put('/manual_books/{manualBook}', [RoleController::class, 'update'])->name('manual_books.update');
-    Route::delete('/manual_books/{manualBook}', [RoleController::class, 'destroy'])->name('manual_books.destroy');
-    Route::get('/manual_books/{manualBook}', [RoleController::class, 'show'])->name('manual_books.show');
+    Route::get('/manual_books', [ManualBookController::class, 'index'])->name('manual_books.index');
+    Route::post('/manual_books', [ManualBookController::class, 'store'])->name('manual_books.store');
+    Route::get('/manual_books/{manualBook}/edit', [ManualBookController::class, 'edit'])->name('manual_books.edit');
+    Route::put('/manual_books/{manualBook}', [ManualBookController::class, 'update'])->name('manual_books.update');
+    Route::delete('/manual_books/{manualBook}', [ManualBookController::class, 'destroy'])->name('manual_books.destroy');
+    Route::get('/manual_books/{manualBook}', [ManualBookController::class, 'show'])->name('manual_books.show');
 });
