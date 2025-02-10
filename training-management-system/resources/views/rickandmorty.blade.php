@@ -90,7 +90,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Data akan dimuat oleh JavaScript -->
+                    <!-- data di js -->
                 </tbody>
             </table>
         </div>
@@ -99,34 +99,48 @@
     <script>
         $(document).ready(function() {
             let table = $('#charactersTable').DataTable();
+            let allCharacters = [];
 
-            function fetchCharacters(name = '') {
+            function fetchAllCharacters(page = 1) {
                 $.ajax({
-                    url: `https://rickandmortyapi.com/api/character/?name=${name}`,
+                    url: `https://rickandmortyapi.com/api/character/?page=${page}`,
                     method: 'GET',
                     success: function(response) {
-                        table.clear();
-                        response.results.forEach(character => {
-                            table.row.add([
-                                `<img src="${character.image}" width="50" class="rounded-circle">`,
-                                character.name,
-                                character.status,
-                                character.species,
-                                character.gender
-                            ]).draw();
-                        });
+                        allCharacters = allCharacters.concat(response.results);
+                        if (response.info.next) {
+                            fetchAllCharacters(page + 1); // Ambil halaman berikutnya
+                        } else {
+                            displayCharacters(allCharacters);
+                        }
                     },
                     error: function() {
-                        table.clear().draw();
+                        console.error("Gagal mengambil data dari API");
                     }
                 });
             }
 
-            fetchCharacters();
+            function displayCharacters(characters) {
+                table.clear();
+                characters.forEach(character => {
+                    table.row.add([
+                        `<img src="${character.image}" width="50" class="rounded-circle">`,
+                        character.name,
+                        character.status,
+                        character.species,
+                        character.gender
+                    ]);
+                });
+                table.draw();
+            }
+
+            fetchAllCharacters();
 
             $('#searchCharacter').on('keyup', function() {
-                let query = $(this).val();
-                fetchCharacters(query);
+                let query = $(this).val().toLowerCase();
+                let filteredCharacters = allCharacters.filter(character => 
+                    character.name.toLowerCase().includes(query)
+                );
+                displayCharacters(filteredCharacters);
             });
         });
     </script>
