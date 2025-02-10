@@ -66,6 +66,7 @@
                     <li class="nav-item"><a href="{{ route('roles.index') }}" class="nav-link text-white">Roles</a></li>
                 @endif
                 <li class="nav-item"><a href="{{ route('manual_books.index') }}" class="nav-link text-white">Manual Books</a></li>
+                <li class="nav-item"><a href="{{ route('profile.index') }}" class="nav-link text-white"><i class="fas fa-user-circle"></i> Profile</a></li>
                 <li class="nav-item"><a href="{{ route('rickandmorty.index') }}" class="nav-link text-white">Rick and Morty API</a></li>
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST">
@@ -91,7 +92,7 @@
                         <th>Title</th>
                         <th>Description</th>
                         <th>File</th>
-                        <th>Actions</th>
+                        @if(Auth::user()->role == 'admin') <th>Actions</th> @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -99,13 +100,15 @@
                         <tr>
                             <td>{{ $book->title }}</td>
                             <td>{{ $book->description }}</td>
-                            <td><a href="{{ Storage::url($book->file_path) }}" target="_blank">View</a></td>
+                            <td><a href="{{ Storage::url($book->file_path) }}" target="_blank">Download</a></td>
+                            @if(Auth::user()->role == 'admin')
                             <td>
                                 <form action="{{ route('manual_books.destroy', $book->id) }}" method="POST">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>

@@ -66,6 +66,7 @@
                     <li class="nav-item"><a href="{{ route('roles.index') }}" class="nav-link text-white">Roles</a></li>
                 @endif
                 <li class="nav-item"><a href="{{ route('manual_books.index') }}" class="nav-link text-white">Manual Books</a></li>
+                <li class="nav-item"><a href="{{ route('profile.index') }}" class="nav-link text-white"><i class="fas fa-user-circle"></i> Profile</a></li>
                 <li class="nav-item"><a href="{{ route('rickandmorty.index') }}" class="nav-link text-white">Rick and Morty API</a></li>
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST">
@@ -89,7 +90,7 @@
                 <thead>
                     <tr>
                         <th>Image</th>
-                        <th>Name</th>
+                        <th>Title</th>
                         <th>Description</th>
                         <th>Actions</th>
                     </tr>
@@ -97,11 +98,12 @@
                 <tbody>
                     @foreach ($banners as $banner)
                     <tr>
-                        <td><img src="{{ asset('storage/' . $banner->image) }}" width="100"></td>
+                        <td><img src="{{ asset('storage/banners/' . $banner->image) }}?timestamp={{ time() }}" width="100" class="banner-img"></td>
                         <td>{{ $banner->name }}</td>
                         <td>{{ $banner->description }}</td>
                         <td>
-                            <form action="{{ route('banners.destroy', $banner->id) }}" method="POST" class="delete-form">
+                            <a href="{{ route('banners.edit', $banner->id) }}" class="btn btn-edit btn-sm text-white editBanner">Edit</a>
+                            <form action="{{ route('banners.destroy', $banner->id) }}" method="POST" class="delete-form" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm delete-btn">Delete</button>

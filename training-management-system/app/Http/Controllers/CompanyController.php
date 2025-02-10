@@ -26,9 +26,10 @@ class CompanyController extends Controller
         return redirect()->route('companies.index')->with('success', 'Company added successfully.');
     }
 
-    public function edit(Company $company)
+    public function edit($id)
     {
-        return response()->json($company);
+        $company = Company::findOrFail($id);
+        return view('companies.edit', compact('company'));
     }
 
     public function update(Request $request, Company $company)

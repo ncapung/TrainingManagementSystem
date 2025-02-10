@@ -66,6 +66,7 @@
                     <li class="nav-item"><a href="{{ route('roles.index') }}" class="nav-link text-white">Roles</a></li>
                 @endif
                 <li class="nav-item"><a href="{{ route('manual_books.index') }}" class="nav-link text-white">Manual Books</a></li>
+                <li class="nav-item"><a href="{{ route('profile.index') }}" class="nav-link text-white"><i class="fas fa-user-circle"></i> Profile</a></li>
                 <li class="nav-item"><a href="{{ route('rickandmorty.index') }}" class="nav-link text-white">Rick and Morty API</a></li>
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST">
@@ -101,7 +102,7 @@
                         <td>{{ $company->company_code }}</td>
                         <td>{{ $company->alamat }}</td>
                         <td>
-                            <button class="btn btn-edit btn-sm text-white editCompany" data-id="{{ $company->id }}">Edit</button>
+                            <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-edit btn-sm text-white editCompany">Edit</a>
                             <form action="{{ route('companies.destroy', $company->id) }}" method="POST" class="delete-form" style="display:inline;">
                                 @csrf
                                 @method('DELETE')

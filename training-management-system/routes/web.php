@@ -8,6 +8,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ManualBookController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,8 +50,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/banners', [BannerController::class, 'index'])->name('banners.index');
     Route::post('/banners', [BannerController::class, 'store'])->name('banners.store');
-    Route::get('/banners/{banner}/edit', [BannerController::class, 'edit'])->name('banners.edit');
-    Route::put('/banners/{banner}', [BannerController::class, 'update'])->name('banners.update');
+    Route::get('/banners/{id}/edit', [BannerController::class, 'edit'])->name('banners.edit');
+    Route::put('/banners/{id}', [BannerController::class, 'update'])->name('banners.update');
+    Route::post('/banners/{id}/update-image', [BannerController::class, 'updateImage'])->name('banners.updateImage');
     Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
     Route::get('/banners/{banner}', [BannerController::class, 'show'])->name('banners.show');
 
@@ -68,6 +70,9 @@ Route::get('/manual_books/{manualBook}/edit', [ManualBookController::class, 'edi
 Route::put('/manual_books/{manualBook}', [ManualBookController::class, 'update'])->name('manual_books.update');
 Route::delete('/manual_books/{manualBook}', [ManualBookController::class, 'destroy'])->name('manual_books.destroy');
 Route::get('/manual_books/{manualBook}', [ManualBookController::class, 'show'])->name('manual_books.show');
+
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+Route::post('/profile/update-photo', [ProfileController::class, 'updatePhoto'])->name('profile.updatePhoto');
 
 Route::get('/rickandmorty', function () {
     return view('rickandmorty');

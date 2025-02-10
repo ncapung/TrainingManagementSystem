@@ -33,30 +33,53 @@ class BannerController extends Controller
         return redirect()->route('banners.index')->with('success', 'Banner berhasil ditambahkan.');
     }
 
-    public function edit(Banner $banner)
+    public function edit($id)
     {
-        return response()->json($banner);
+        $banner = Banner::findOrFail($id);
+        return view('banners.edit', compact('banner'));
     }
 
-    public function update(Request $request, Banner $banner)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'description' => 'required'
+        $banner = Banner::findOrFail($id);
+        $banner->update([
+            'name' => $request->name,
+            'description' => $request->description,
         ]);
 
-        if ($request->hasFile('image')) {
-            Storage::disk('public')->delete($banner->image);
-            $imagePath = $request->file('image')->store('banners', 'public');
-            $banner->image = $imagePath;
+        $banner->update([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+        
+        return redirect()->route('banners.index')->with('success', 'Banner updated successfully');
+    }
+
+    public function updateImage(Request $request, $id)
+    {
+        $banner = Banner::findOrFail($id);
+
+        // Validasi file gambar
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Hapus gambar lama jika ada
+        if ($banner->image) {
+            Storage::delete('public/banners/' . $banner->image);
         }
 
-        $banner->name = $request->name;
-        $banner->description = $request->description;
-        $banner->save();
+        // Simpan gambar baru
+        $imagePath = $request->file('image')->store('public/banners');
+        $imageName = basename($imagePath);
 
-        return redirect()->route('banners.index')->with('success', 'Banner updated successfully.');
+        // Perbarui data di database
+        $banner->update(['image' => $imageName]);
+
+        return response()->json([
+            'success' => true,
+            'image_url' => asset('storage/banners/' . $imageName),
+        ]);
     }
 
     public function show(Banner $banner)
