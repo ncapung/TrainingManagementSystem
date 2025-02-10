@@ -59,21 +59,17 @@ class BannerController extends Controller
     {
         $banner = Banner::findOrFail($id);
 
-        // Validasi file gambar
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Hapus gambar lama jika ada
         if ($banner->image) {
             Storage::delete('public/banners/' . $banner->image);
         }
 
-        // Simpan gambar baru
         $imagePath = $request->file('image')->store('public/banners');
         $imageName = basename($imagePath);
 
-        // Perbarui data di database
         $banner->update(['image' => $imageName]);
 
         return response()->json([

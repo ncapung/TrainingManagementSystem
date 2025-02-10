@@ -109,7 +109,7 @@
                     success: function(response) {
                         allCharacters = allCharacters.concat(response.results);
                         if (response.info.next) {
-                            fetchAllCharacters(page + 1); // Ambil halaman berikutnya
+                            fetchAllCharacters(page + 1);
                         } else {
                             displayCharacters(allCharacters);
                         }

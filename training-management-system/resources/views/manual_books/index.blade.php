@@ -115,23 +115,25 @@
             </table>
 
             <!-- Add Company Form -->
-            <h3 class="mt-4" style="margin-bottom: 20px;">Add New Manual Book</h3>
-            <form id="addManualBookForm" action="{{ route('manual_books.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="mb-2">
-                    <label>Title</label>
-                    <input type="text" name="title" class="form-control" required>
-                </div>
-                <div class="mb-2">
-                    <label>Description</label>
-                    <input type="text" name="description" class="form-control" required></
-                </div>
-                <div class="mb-2">
-                    <label>Upload File (PDF)</label>
-                    <input type="file" name="file" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Add Manual Book</button>
-            </form>
+            @if(Auth::user()->role == 'admin')
+                <h3 class="mt-4" style="margin-bottom: 20px;">Add New Manual Book</h3>
+                <form id="addManualBookForm" action="{{ route('manual_books.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-2">
+                        <label>Title</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-2">
+                        <label>Description</label>
+                        <input type="text" name="description" class="form-control" required></
+                    </div>
+                    <div class="mb-2">
+                        <label>Upload File (PDF)</label>
+                        <input type="file" name="file" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Manual Book</button>
+                </form>
+            @endif
         </div>
     </div>
 </body>
