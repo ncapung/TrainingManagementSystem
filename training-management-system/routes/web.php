@@ -60,11 +60,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
     Route::get('/roles/{role}', [RoleController::class, 'show'])->name('roles.show');
-
-    Route::get('/manual_books', [ManualBookController::class, 'index'])->name('manual_books.index');
-    Route::post('/manual_books', [ManualBookController::class, 'store'])->name('manual_books.store');
-    Route::get('/manual_books/{manualBook}/edit', [ManualBookController::class, 'edit'])->name('manual_books.edit');
-    Route::put('/manual_books/{manualBook}', [ManualBookController::class, 'update'])->name('manual_books.update');
-    Route::delete('/manual_books/{manualBook}', [ManualBookController::class, 'destroy'])->name('manual_books.destroy');
-    Route::get('/manual_books/{manualBook}', [ManualBookController::class, 'show'])->name('manual_books.show');
 });
+
+Route::get('/manual_books', [ManualBookController::class, 'index'])->name('manual_books.index');
+Route::post('/manual_books', [ManualBookController::class, 'store'])->name('manual_books.store');
+Route::get('/manual_books/{manualBook}/edit', [ManualBookController::class, 'edit'])->name('manual_books.edit');
+Route::put('/manual_books/{manualBook}', [ManualBookController::class, 'update'])->name('manual_books.update');
+Route::delete('/manual_books/{manualBook}', [ManualBookController::class, 'destroy'])->name('manual_books.destroy');
+Route::get('/manual_books/{manualBook}', [ManualBookController::class, 'show'])->name('manual_books.show');
+
+Route::get('/rickandmorty', function () {
+    return view('rickandmorty');
+})->name('rickandmorty.index');

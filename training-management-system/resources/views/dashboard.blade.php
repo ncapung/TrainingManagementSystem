@@ -30,6 +30,7 @@
                     <li class="nav-item"><a href="{{ route('roles.index') }}" class="nav-link text-white">Roles</a></li>
                 @endif
                 <li class="nav-item"><a href="{{ route('manual_books.index') }}" class="nav-link text-white">Manual Books</a></li>
+                <li class="nav-item"><a href="{{ route('rickandmorty.index') }}" class="nav-link text-white">Rick and Morty API</a></li>
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
@@ -37,7 +38,7 @@
                     </form>
                 </li>
             </ul>
-         </nav>
+        </nav>
          
         <!-- Main Content -->
         <div class="container-fluid" style="margin-left: 280px; margin-right: 40px; padding-top: 20px; padding-left: 20px;">

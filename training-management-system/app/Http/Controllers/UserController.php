@@ -21,7 +21,8 @@ class UserController extends Controller
             'username' => 'required|unique:users',
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
+            'password' => 'required|min:8|confirmed',
+            'password_confirmation' => 'required',
             'phone_number' => 'required',
             'company_name' => 'nullable',
             'role' => 'required|in:admin,guest',
@@ -45,7 +46,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return response()->json($user);
+        return view('users.edit', compact('user'));
     }
 
     public function update(Request $request, $id)
@@ -60,9 +61,11 @@ class UserController extends Controller
             'company_name' => 'nullable',
             'role' => 'required|in:admin,guest',
             'birthday' => 'nullable|date|before:today',
+            'password' => 'nullable|min:8|confirmed',
+            'password_confirmation' => 'required_with:password',
         ]);
 
-        $user->update([
+        $updateData = [
             'username' => $request->username,
             'name' => $request->name,
             'email' => $request->email,
@@ -70,7 +73,13 @@ class UserController extends Controller
             'company_name' => $request->company_name,
             'role' => $request->role,
             'birthday' => $request->birthday,
-        ]);
+        ];
+
+        if ($request->filled('password')) {
+            $updateData['password'] = Hash::make($request->password);
+        }
+
+        $user->update($updateData);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }

@@ -77,7 +77,7 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <h2 style="margin-top: 30px; margin-bottom: 20px;">Manual Books</h2>
+            <h2 style="margin-top: 30px; margin-bottom: 20px;">Manual Books Management</h2>
 
             <!-- Success Message -->
             @if(session('success'))
@@ -94,19 +94,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach ($manual_books as $book)
-                    <tr>
-                        <td>{{ $book->title }}</td>
-                        <td>{{ $book->description }}</td>
-                        <td><a href="{{ Storage::url($book->file_path) }}" target="_blank">View</a></td>
-                        <td>
-                            <form action="{{ route('manual_books.destroy', $book->id) }}" method="POST">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
+                    @foreach ($manual_books as $book)
+                        <tr>
+                            <td>{{ $book->title }}</td>
+                            <td>{{ $book->description }}</td>
+                            <td><a href="{{ Storage::url($book->file_path) }}" target="_blank">View</a></td>
+                            <td>
+                                <form action="{{ route('manual_books.destroy', $book->id) }}" method="POST">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
 
@@ -114,15 +114,15 @@
             <h3 class="mt-4" style="margin-bottom: 20px;">Add New Manual Book</h3>
             <form id="addManualBookForm" action="{{ route('manual_books.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="mb-3">
+                <div class="mb-2">
                     <label>Title</label>
                     <input type="text" name="title" class="form-control" required>
                 </div>
-                <div class="mb-3">
+                <div class="mb-2">
                     <label>Description</label>
                     <input type="text" name="description" class="form-control" required></
                 </div>
-                <div class="mb-3">
+                <div class="mb-2">
                     <label>Upload File (PDF)</label>
                     <input type="file" name="file" class="form-control" required>
                 </div>
@@ -137,36 +137,11 @@
 $(document).ready(function() {
     $('#manual_booksTable').DataTable();
 
-    $('#addManualBookForm').submit(function(e) {
+    $('.delete-btn').click(function(e) {
         e.preventDefault();
-        let formData = new FormData(this);
-
-        $.ajax({
-            url: "{{ route('manual_books.store') }}",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                let newRow = `<tr>
-                    <td>${response.title}</td>
-                    <td>${response.description}</td>
-                    <td><a href="/storage/${response.file_path}" target="_blank">View</a></td>
-                    <td>
-                        <form action="/manual_books/${response.id}" method="POST">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>`;
-                $('table tbody').append(newRow);
-                $('#addManualBookForm')[0].reset();
-                alert('Manual Book added successfully!');
-            },
-            error: function(response) {
-                alert('Failed to add manual book. Please try again.');
-            }
-        });
+        if (confirm('Are you sure you want to delete this manual book?')) {
+            $(this).closest('form').submit();
+        }
     });
 });
 </script>

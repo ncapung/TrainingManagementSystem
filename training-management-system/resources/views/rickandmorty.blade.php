@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <title>Banners Management</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="//cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
+    <title>Rick and Morty</title>
 
     <style>
         body {
@@ -42,12 +44,6 @@
                 padding: 15px;
             }
         }
-        .btn-edit{
-            background-color:rgb(78, 145, 189) !important;
-        }
-        .btn-delete{
-            background-color:rgb(189, 78, 78) !important;
-        }
     </style>
 </head>
 <body>
@@ -66,6 +62,7 @@
                     <li class="nav-item"><a href="{{ route('roles.index') }}" class="nav-link text-white">Roles</a></li>
                 @endif
                 <li class="nav-item"><a href="{{ route('manual_books.index') }}" class="nav-link text-white">Manual Books</a></li>
+                <li class="nav-item"><a href="{{ route('rickandmorty.index') }}" class="nav-link text-white">Rick and Morty API</a></li>
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
@@ -73,77 +70,65 @@
                     </form>
                 </li>
             </ul>
-         </nav>
+        </nav>
 
         <!-- Main Content -->
         <div class="main-content">
-            <h2 style="margin-top: 30px; margin-bottom: 20px;">Banners Management</h2>
+            <h2 style="margin-top: 30px; margin-bottom: 20px;">Rick and Morty Characters</h2>
 
-            <!-- Success Message -->
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-
-            <table style="margin-bottom: 50px;" id="bannersTable" class="table table-striped">
+            <div class="mb-3">
+                <input type="text" id="searchCharacter" class="form-control" placeholder="Search Character Name...">
+            </div>
+            <table id="charactersTable" class="table table-striped">
                 <thead>
                     <tr>
                         <th>Image</th>
                         <th>Name</th>
-                        <th>Description</th>
-                        <th>Actions</th>
+                        <th>Status</th>
+                        <th>Species</th>
+                        <th>Gender</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($banners as $banner)
-                    <tr>
-                        <td><img src="{{ asset('storage/' . $banner->image) }}" width="100"></td>
-                        <td>{{ $banner->name }}</td>
-                        <td>{{ $banner->description }}</td>
-                        <td>
-                            <form action="{{ route('banners.destroy', $banner->id) }}" method="POST" class="delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm delete-btn">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
+                    <!-- Data akan dimuat oleh JavaScript -->
                 </tbody>
             </table>
-
-            <!-- Add Company Form -->
-            <h3 class="mt-4" style="margin-bottom: 20px;">Add New Banner</h3>
-            <form id="addBannerForm" action="{{ route('banners.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="mb-2">
-                    <label>Banners</label>
-                    <input type="file" name="image" class="form-control" required>
-                </div>
-                <div class="mb-2">
-                    <label>Name</label>
-                    <input type="text" name="name" class="form-control" required>
-                </div>
-                <div class="mb-2">
-                    <label>Description</label>
-                    <textarea name="description" class="form-control" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary mt-2">Add Banner</button>
-            </form>
         </div>
     </div>
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="//cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#bannersTable').DataTable();
 
-        $('.delete-btn').click(function(e) {
-            e.preventDefault();
-            if (confirm('Are you sure you want to delete this banner?')) {
-                $(this).closest('form').submit();
+    <script>
+        $(document).ready(function() {
+            let table = $('#charactersTable').DataTable();
+
+            function fetchCharacters(name = '') {
+                $.ajax({
+                    url: `https://rickandmortyapi.com/api/character/?name=${name}`,
+                    method: 'GET',
+                    success: function(response) {
+                        table.clear();
+                        response.results.forEach(character => {
+                            table.row.add([
+                                `<img src="${character.image}" width="50" class="rounded-circle">`,
+                                character.name,
+                                character.status,
+                                character.species,
+                                character.gender
+                            ]).draw();
+                        });
+                    },
+                    error: function() {
+                        table.clear().draw();
+                    }
+                });
             }
+
+            fetchCharacters();
+
+            $('#searchCharacter').on('keyup', function() {
+                let query = $(this).val();
+                fetchCharacters(query);
+            });
         });
-    });
-</script>
+    </script>
+</body>
 </html>

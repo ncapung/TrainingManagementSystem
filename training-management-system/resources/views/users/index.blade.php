@@ -66,6 +66,7 @@
                     <li class="nav-item"><a href="{{ route('roles.index') }}" class="nav-link text-white">Roles</a></li>
                 @endif
                 <li class="nav-item"><a href="{{ route('manual_books.index') }}" class="nav-link text-white">Manual Books</a></li>
+                <li class="nav-item"><a href="{{ route('rickandmorty.index') }}" class="nav-link text-white">Rick and Morty API</a></li>
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
@@ -73,7 +74,7 @@
                     </form>
                 </li>
             </ul>
-         </nav>
+        </nav>
 
         <!-- Main Content -->
         <div class="main-content">
@@ -104,11 +105,11 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone_number }}</td>
-                        <td>{{ $user->company }}</td>
+                        <td>{{ $user->company_name }}</td>
                         <td>{{ $user->role }}</td>
                         <td>{{ $user->birthday }}</td>
                         <td>
-                            <button class="btn btn-edit btn-sm text-white editUser" data-id="{{ $user->id }}">Edit</button>
+                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-edit btn-sm text-white editUser">Edit</a>
                             <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="delete-form" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
@@ -139,6 +140,10 @@
             <div class="mb-2">
                 <label>Password</label>
                 <input type="password" name="password" class="form-control" required>
+            </div>
+            <div class="mb-2">
+                <label>Confirm Password</label>
+                <input type="password" name="password_confirmation" class="form-control" required>
             </div>
             <div class="mb-2">
                 <label>Phone Number</label>
