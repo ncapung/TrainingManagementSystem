@@ -20,7 +20,7 @@
         <!-- Banner Display -->
         <div class="mb-3">
             <label>Current Banner Image:</label>
-            <img id="bannerImage" src="{{ asset('storage/banners/' . $banner->image) }}" alt="Banner Image" class="img-fluid d-block mt-2" width="300">
+            <img id="bannerImage" src="{{ asset('storage/' . $banner->image) }}?timestamp={{ time() }}" alt="Banner Image" class="img-fluid d-block mt-2" width="300">
         </div>
 
         <!-- Edit Data Form -->

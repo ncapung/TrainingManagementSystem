@@ -98,7 +98,7 @@
                 <tbody>
                     @foreach ($banners as $banner)
                     <tr>
-                        <td><img src="{{ asset('storage/banners/' . $banner->image) }}?timestamp={{ time() }}" width="100" class="banner-img"></td>
+                        <td><img src="{{ asset('storage/' . $banner->image) }}?timestamp={{ time() }}" width="100" class="banner-img"></td>
                         <td>{{ $banner->name }}</td>
                         <td>{{ $banner->description }}</td>
                         <td>

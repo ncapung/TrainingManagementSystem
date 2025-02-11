@@ -30,7 +30,7 @@ class BannerController extends Controller
             'description' => $request->description
         ]);
 
-        return redirect()->route('banners.index')->with('success', 'Banner berhasil ditambahkan.');
+        return redirect()->route('banners.index')->with('success', 'Banner added successfully.');
     }
 
     public function edit($id)
@@ -52,7 +52,7 @@ class BannerController extends Controller
             'description' => $request->description,
         ]);
         
-        return redirect()->route('banners.index')->with('success', 'Banner updated successfully');
+        return redirect()->route('banners.index')->with('success', 'Banner updated successfully.');
     }
 
     public function updateImage(Request $request, $id)
